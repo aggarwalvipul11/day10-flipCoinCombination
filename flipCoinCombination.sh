@@ -1,5 +1,7 @@
 #!/bin/bash
-flip()
+
+#!/bin/bash
+function flip()
 {
     if [[ $((RANDOM%2)) == 0 ]]
     then
@@ -8,8 +10,36 @@ flip()
         echo "t"
     fi
 }
+function percent() 
+{
+    array=($@)
+    sum=0
+    for i in ${array[@]}
+    do
+        sum=$(($sum+$i))
+    done
+    declare -a per
+    for ((i=0;i<${#array[@]};i++))
+    do
+        per[i]=$(echo "scale=2;${array[$i]}*100/$sum" | bc)
+    done
+    echo ${per[@]}
+   
 
-singlet_run()
+}
+
+function max()
+{
+    status=$(echo "$1 > $2" | bc)
+    if [[ $status -ne 0 ]]
+    then 
+        echo $1
+    else
+        echo $2
+    fi
+}
+
+function singlet_run()
 {
     declare -A singlet
     singlet[heads]=0
@@ -57,7 +87,7 @@ singlet_run()
 
 }
 
-doublet_run()
+function doublet_run()
 {
 
     declare -A doubblet
@@ -121,7 +151,7 @@ doublet_run()
 }
 
 
-triplet_run()
+function triplet_run()
 {
     declare -A triplet
     triplet[hhh]=0
@@ -210,7 +240,9 @@ do
         "3")
         echo $(triplet_run)
         ;;
+        "4")
+            iter=$wish
 	*)
-		echo "Error"
+	     echo "Error"
     esac
 done
